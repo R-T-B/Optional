@@ -1016,10 +1016,10 @@ constexpr optional<typename decay<T>::type> make_optional(T&& v)
   return optional<typename decay<T>::type>(constexpr_forward<T>(v));
 }
 
-template <class X>
-constexpr optional<X&> make_optional(reference_wrapper<X> v)
+template< class T, class... Args > 
+constexpr optional<T> make_optional( Args&&... args )
 {
-  return optional<X&>(v.get());
+  return optional<T>(in_place, std::forward<Args>(args)...);
 }
 
 
