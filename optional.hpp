@@ -423,9 +423,22 @@ public:
     }
   }
 
-  constexpr optional(const T& v) : OptionalBase<T>(v) {}
+  template < class U >
+  optional( const optional<U>& other ) : OptionalBase<T>() {
+    if (other.initialized()) {
+      *this = other.value();
+    }
+  }
 
-  constexpr optional(T&& v) : OptionalBase<T>(constexpr_move(v)) {}
+  template < class U >
+  optional( optional<U>&& other ) : OptionalBase<T>() {
+    if (other.initialized()) {
+      *this = std::move(other.value());
+    }  
+  }
+
+  template < class U = value_type >
+  constexpr optional(U&& v) : OptionalBase<T>(constexpr_move(v)) {}
 
   template <class... Args>
   explicit constexpr optional(in_place_t, Args&&... args)
